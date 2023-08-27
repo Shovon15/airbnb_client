@@ -1,16 +1,19 @@
-import React from "react";
-import { Card, CardHeader, CardBody, CardFooter, Typography, Tooltip } from "@material-tailwind/react";
+import { Card, CardHeader, CardBody, Typography } from "@material-tailwind/react";
 import { useProductContext } from "../context/ProductProvider";
+import CardSkeleton from "../components/card/CardSkeleton";
 
 const Items = () => {
-	const { items } = useProductContext();
-	console.log(items, "items");
+	const { items, isItemLoading } = useProductContext();
 
 	return (
 		<div className="flex gap-2 flex-wrap justify-center py-5">
-			{items.map((item) => (
+			{isItemLoading === true ? (
 				<>
-					<Card className="w-60">
+					<CardSkeleton />
+				</>
+			) : (
+				items.map((item, i) => (
+					<Card key={i} className="w-60">
 						<CardHeader floated={false} className="max-h-44 m-0">
 							<img className="" src={item.image} alt="profile-picture" />
 						</CardHeader>
@@ -23,12 +26,8 @@ const Items = () => {
 							</Typography>
 						</CardBody>
 					</Card>
-					{/* <div className="bg-slate-400 max-h-44  rounded-md">
-						<img className="rounded-md w-12" src={item.image} alt="..." />
-						<p>{item.name}</p>
-					</div> */}
-				</>
-			))}
+				))
+			)}
 			<div></div>
 		</div>
 	);

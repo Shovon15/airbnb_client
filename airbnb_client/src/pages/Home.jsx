@@ -1,10 +1,8 @@
-import Category from "../components/category/Category";
 import Items from "./Items";
 
 const Home = () => {
 	return (
-		<div className="relative">
-			<Category />
+		<div>
 			<Items />
 		</div>
 	);

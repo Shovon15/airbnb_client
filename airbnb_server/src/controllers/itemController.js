@@ -26,4 +26,84 @@ const getItemByCategory = async (req, res, next) => {
 	}
 };
 
-module.exports = { getItemByCategory };
+const getItems = async (req, res, next) => {
+	try {
+		const items = await ItemModel.find();
+
+		if (!items || items.length === 0) {
+			throw createError(404, "No items found");
+		}
+
+		return successResponse(res, {
+			statusCode: 200,
+			message: "Items were returned successfully!!!",
+			payload: {
+				items,
+			},
+		});
+	} catch (error) {
+		next(error);
+	}
+};
+
+const getFilterItems = async (req, res, next) => {
+	try {
+		const minPrice = parseFloat(req.query.minPrice) || 0;
+		const maxPrice = parseFloat(req.query.maxPrice) || Number.MAX_SAFE_INTEGER;
+		const minRooms = parseInt(req.query.room) || 0;
+		const minBeds = parseInt(req.query.bed) || 0;
+		const minBathrooms = parseInt(req.query.bathroom) || 0;
+		const propertyTypes = req.query.property_type || [];
+
+		let filter = {
+			$and: [
+				{
+					price: { $gte: minPrice, $lte: maxPrice },
+				},
+				{
+					bed: { $gte: minBeds },
+				},
+				{
+					room: { $gte: minRooms },
+				},
+				{
+					bathroom: { $gte: minBathrooms },
+				},
+			],
+		};
+
+		if (!Array.isArray(propertyTypes)) {
+			propertyTypes = [propertyTypes];
+		}
+
+		if (propertyTypes.length === 1) {
+			filter.property_type = propertyTypes[0];
+		} else if (propertyTypes.length > 1) {
+			filter.property_type = { $in: propertyTypes };
+		}
+
+		filter = {
+			...filter,
+		};
+		const items = await ItemModel.find(filter);
+
+		const count = await ItemModel.find(filter).countDocuments();
+
+		if (!items || items.length === 0) {
+			throw createError(404, "No items found");
+		}
+
+		return successResponse(res, {
+			statusCode: 200,
+			message: "Items were returned successfully!!!",
+			payload: {
+				items,
+				count,
+			},
+		});
+	} catch (error) {
+		next(error);
+	}
+};
+
+module.exports = { getItemByCategory, getItems, getFilterItems };

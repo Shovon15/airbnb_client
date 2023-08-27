@@ -3,6 +3,7 @@ const cors = require("cors");
 const morgan = require("morgan");
 
 const categoryRouter = require("./routers/categoryRouter");
+const itemRouter = require("./routers/itemRouter");
 const { seedCategoryRouter, seedItemRouter } = require("./routers/seedRouter");
 const { errorResponse } = require("./controllers/responseController");
 const createError = require("http-errors");
@@ -12,6 +13,7 @@ app.use(cors());
 
 app.use("/api/seed", seedCategoryRouter, seedItemRouter);
 app.use("/api/category", categoryRouter);
+app.use("/api/item", itemRouter);
 
 //client error--------------------
 app.use((req, res, next) => {

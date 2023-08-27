@@ -3,7 +3,7 @@ import Nav from "../components/Nav/Nav";
 
 const MainLayout = () => {
 	return (
-		<div className="">
+		<div>
 			<Nav />
 			<Outlet />
 		</div>

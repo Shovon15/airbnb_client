@@ -19,6 +19,23 @@ const itemSchema = new Schema({
 		type: Number,
 		required: [true, "price is required"],
 	},
+	room: {
+		type: Number,
+		required: [true, "room number is required"],
+	},
+	bed: {
+		type: Number,
+		required: [true, "bed number is required"],
+	},
+	bathroom: {
+		type: Number,
+		required: [true, "bthroom number is required"],
+	},
+	property_type: {
+		type: String,
+		required: [true, "property type  is required"],
+		trim: true,
+	},
 });
 
 const ItemModel = model("item", itemSchema);

@@ -1,0 +1,21 @@
+@keyframes skeleton-animation {
+    0% {
+      opacity: 0.2;
+    }
+    30% {
+      opacity: 0.5;
+    }
+    50% {
+      opacity: 0.9;
+    }
+    70% {
+      opacity: 0.5;
+    }
+    100% {
+      opacity: 0.3;
+    }
+  }
+  
+  .animate-skeleton {
+    animation: skeleton-animation 1.5s ease-in-out infinite;
+  }
