@@ -1,0 +1,16 @@
+.area {
+    /* Your default styles */
+    height: 100px;
+    transition: height 0.3s ease; /* Add a transition for smooth animation */
+  }
+  
+  .area.expanded {
+    height: 200px; /* Adjust to your desired expanded height */
+  }
+  .date-picker{
+    margin: 0px !important;
+    padding: 0px !important;
+    border: none;
+    width: 50% !important;
+  }
+ 

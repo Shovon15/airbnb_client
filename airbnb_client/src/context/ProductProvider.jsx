@@ -15,6 +15,7 @@ const ProductProvider = ({ children }) => {
 	const [items, setItems] = useState([]);
 	const [selectedCategory, setSelectedCategory] = useState(null);
 	const [filterItem, setFilterItem] = useState([]);
+	const [searchItem, setSearchItem] = useState([]);
 	const [isLoading, setIsLoading] = useState(false);
 	const [isItemLoading, setIsItemLoading] = useState(false);
 
@@ -67,6 +68,8 @@ const ProductProvider = ({ children }) => {
 		isLoading,
 		setIsLoading,
 		isItemLoading,
+		searchItem,
+		setSearchItem,
 	};
 
 	return <ProductContext.Provider value={productInfo}>{children}</ProductContext.Provider>;

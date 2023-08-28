@@ -105,5 +105,58 @@ const getFilterItems = async (req, res, next) => {
 		next(error);
 	}
 };
+const getSearchItems = async (req, res, next) => {
+	try {
+		const searchQuery = req.query;
 
-module.exports = { getItemByCategory, getItems, getFilterItems };
+		destination = searchQuery.destination;
+		from_date = searchQuery.from_date;
+		to_date = searchQuery.to_date;
+		adaltguest = parseInt(searchQuery.adaltguest);
+		infants = parseInt(searchQuery.infants);
+
+		const searchRegExp = new RegExp(".*" + destination + ".*", "i");
+		const searchCheckInRegExp = new RegExp(".*" + from_date + ".*", "i");
+		const searchCheckOutRegExp = new RegExp(".*" + to_date + ".*", "i");
+
+		let filter = {
+			$and: [
+				{
+					location: { $regex: searchRegExp },
+				},
+				// {
+				// 	checkin_avalable: { $regex: searchCheckInRegExp },
+				// },
+				// {
+				// 	checkout_avalable: { $regex: searchCheckOutRegExp },
+				// },
+				{
+					adaltguest: { $gte: adaltguest },
+				},
+				{
+					infants: { $gte: infants },
+				},
+			],
+		};
+		const items = await ItemModel.find(filter);
+
+		const count = await ItemModel.find(filter).countDocuments();
+
+		if (!items || items.length === 0) {
+			throw createError(404, "No items found");
+		}
+		console.log(count, "count");
+		return successResponse(res, {
+			statusCode: 200,
+			message: "Items were returned successfully!!!",
+			payload: {
+				items,
+				count,
+			},
+		});
+	} catch (error) {
+		next(error);
+	}
+};
+
+module.exports = { getItemByCategory, getItems, getFilterItems, getSearchItems };

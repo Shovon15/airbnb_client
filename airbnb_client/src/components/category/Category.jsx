@@ -6,7 +6,7 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import api from "../../utils/fetchApi";
 import { useProductContext } from "../../context/ProductProvider";
-import Filter from "./Filter";
+import Filter from "../../pages/Filter";
 import { BsFilterRight } from "react-icons/bs";
 import CategorySkeleton from "./CategorySkeleton";
 
@@ -17,7 +17,7 @@ const Category = ({ category }) => {
 	const handleOpen = () => setOpen(!open);
 
 	return (
-		<div className="sticky top-20 z-20 bg-white flex gap-5 justify-center py-3">
+		<div className="sticky top-20 z- bg-white flex gap-5 justify-center py-3">
 			{isLoading === true ? (
 				<>
 					<CategorySkeleton />

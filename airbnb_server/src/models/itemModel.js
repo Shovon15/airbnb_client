@@ -36,6 +36,26 @@ const itemSchema = new Schema({
 		required: [true, "property type  is required"],
 		trim: true,
 	},
+	location: {
+		type: String,
+		required: [true, "location  is required"],
+	},
+	checkin_avalable: {
+		type: String,
+		required: [true, "checkin date  is required"],
+	},
+	checkout_avalable: {
+		type: String,
+		required: [true, "check out date  is required"],
+	},
+	adaltguest: {
+		type: Number,
+		required: [true, "total guest number  is required"],
+	},
+	infants: {
+		type: Number,
+		required: [true, "infants number  is required"],
+	},
 });
 
 const ItemModel = model("item", itemSchema);

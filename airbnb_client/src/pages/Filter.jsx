@@ -9,8 +9,8 @@ import { MdOutlineWarehouse } from "react-icons/md";
 import { RiHotelLine } from "react-icons/ri";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
-import api from "../../utils/fetchApi";
-import { useProductContext } from "../../context/ProductProvider";
+import api from "../utils/fetchApi";
+import { useProductContext } from "../context/ProductProvider";
 
 export function Filter({ handleOpen, open }) {
 	const { filterItem, setFilterItem } = useProductContext();
@@ -22,7 +22,7 @@ export function Filter({ handleOpen, open }) {
 	const [selectedPropertyTypes, setSelectedPropertyTypes] = useState([]);
 
 	const [error, setError] = useState("");
-	console.log(error);
+	// console.log(error);
 	const navigate = useNavigate();
 
 	const BedRoomValue = ["any", "1", "2", "3", "4", "5", "6", "7", "8"];
@@ -48,7 +48,7 @@ export function Filter({ handleOpen, open }) {
 
 	const handleMinChange = (event) => {
 		const value = parseInt(event.target.value);
-		setMinValue(value);
+
 		if (isNaN(value)) {
 			setMinValue("");
 		} else {
