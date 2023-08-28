@@ -8,7 +8,7 @@ const ItemCard = ({ item }) => {
 	return (
 		<Card className="w-60">
 			<CardHeader floated={false} className="max-h-44 m-0">
-				<img className="" src={item.image} alt="profile-picture" />
+				<img className="h-44" src={item.image} alt="profile-picture" />
 			</CardHeader>
 			<CardBody className="text-start p-2">
 				<Typography variant="h6" color="blue-gray" className="mb-2">
