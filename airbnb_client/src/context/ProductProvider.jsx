@@ -1,8 +1,9 @@
+/* eslint-disable react-refresh/only-export-components */
 /* eslint-disable no-unused-vars */
 /* eslint-disable react/prop-types */
 
 import { createContext, useContext, useEffect, useState } from "react";
-import api from "../utils/fetchApi";
+import { get } from "../utils/fetchApi";
 
 export const ProductContext = createContext();
 
@@ -21,7 +22,7 @@ const ProductProvider = ({ children }) => {
 
 	useEffect(() => {
 		setIsLoading(true);
-		api.get("/category")
+		get("/category")
 			.then((res) => {
 				const data = res.data?.payload?.category;
 				setCategories(data);
@@ -41,7 +42,7 @@ const ProductProvider = ({ children }) => {
 	useEffect(() => {
 		setIsItemLoading(true);
 		if (selectedCategory) {
-			api.get(`category/${selectedCategory}`)
+			get(`category/${selectedCategory}`)
 				.then((res) => {
 					const data = res.data.payload?.items;
 					setItems(data);

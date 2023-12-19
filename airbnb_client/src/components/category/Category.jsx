@@ -1,24 +1,20 @@
-/* eslint-disable no-unused-vars */
-/* eslint-disable react/prop-types */
+import { Button } from "@material-tailwind/react";
+import { useState } from "react";
 
-import { Button, IconButton } from "@material-tailwind/react";
-import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
-import api from "../../utils/fetchApi";
 import { useProductContext } from "../../context/ProductProvider";
 import Filter from "../../pages/Filter";
 import { BsFilterRight } from "react-icons/bs";
 import CategorySkeleton from "./CategorySkeleton";
 
-const Category = ({ category }) => {
+const Category = () => {
 	const [open, setOpen] = useState(false);
-	const { categories, items, handleCategory, selectedCategory, isLoading } = useProductContext();
+	const { categories, handleCategory, selectedCategory, isLoading } = useProductContext();
 
 	const handleOpen = () => setOpen(!open);
 
 	return (
 		<div className="sticky top-20 z- bg-white flex gap-5 justify-center py-3">
-			{isLoading === true ? (
+			{isLoading ? (
 				<>
 					<CategorySkeleton />
 				</>

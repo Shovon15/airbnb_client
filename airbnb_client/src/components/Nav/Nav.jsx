@@ -1,4 +1,5 @@
-import { Link, Navigate, useNavigate } from "react-router-dom";
+/* eslint-disable no-unused-vars */
+import { Link, useNavigate } from "react-router-dom";
 import logo from "../../assets/airbnb-logo.svg";
 import Category from "../category/Category";
 import { Collapse, IconButton, Menu, MenuHandler, MenuList, Typography } from "@material-tailwind/react";
@@ -6,11 +7,11 @@ import { useEffect, useRef, useState } from "react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import "./nav.css";
-import { RxCross2 } from "react-icons/rx";
+
 import { HiOutlinePlus } from "react-icons/hi";
 import { HiOutlineMinus } from "react-icons/hi";
 import moment from "moment";
-import api from "../../utils/fetchApi";
+import { getWithParams } from "../../utils/fetchApi";
 import { useProductContext } from "../../context/ProductProvider";
 import { showErrorToast } from "../toaster";
 
@@ -26,7 +27,8 @@ const Nav = () => {
 	};
 
 	const { searchItem, setSearchItem } = useProductContext();
-	const [open, setOpen] = useState(false);
+	const [isOpenNav, setIsOpenNav] = useState(false);
+
 	const [searchQuery, setSearchQuery] = useState(initialSearch);
 	const [adaltCount, setAdaltCount] = useState(0);
 	const [childrenCount, setChildrenCount] = useState(0);
@@ -34,18 +36,22 @@ const Nav = () => {
 	const [totalCount, setTotalCount] = useState(0);
 	const [searchError, setSearchError] = useState("");
 
-	const toggleOpen = () => setOpen((cur) => !cur);
-	// useEffect(() => {
-	// 	let handler = (e) => {
-	// 		if (!menuRef.current.contains(e.target)) {
-	// 			setOpen(false);
-	// 		}
-	// 	};
-	// 	document.addEventListener("mousedown", handler);
-	// 	return () => {
-	// 		document.removeEventListener("mousedown", handler);
-	// 	};
-	// });
+	const toggleOpen = () => setIsOpenNav(!isOpenNav);
+
+	useEffect(() => {
+		let handler = (e) => {
+			if (!menuRef.current.contains(e.target)) {
+				setIsOpenNav(false);
+			}
+		};
+		document.addEventListener("mousedown", handler);
+		return () => {
+			document.removeEventListener("mousedown", handler);
+		};
+	});
+	// console.log(isOpenNav);
+
+	// console.log(searchItem, "searchItem");
 
 	const increasetCount = (count, setCount) => {
 		setCount(count + 1);
@@ -79,7 +85,7 @@ const Nav = () => {
 
 		const fetchData = async () => {
 			try {
-				const response = await api.get("/item/search", { params: payload });
+				const response = await getWithParams("/item/search", { params: payload });
 				const data = response.data?.payload;
 				setSearchItem(data);
 				navigate("/search");
@@ -93,10 +99,32 @@ const Nav = () => {
 		fetchData();
 	};
 
+	// let navRef = useRef();
+
+	// useEffect(() => {
+	// 	window.addEventListener("resize", () => window.innerWidth >= 960 && setOpenNav(false));
+	// 	window.addEventListener("scroll", () => setScrollPosition(Math.round(window.scrollY)));
+	// 	document.addEventListener("scroll", () => setOpenNav(false));
+
+	// 	const handler = (e) => {
+	// 		if (navRef.current && !navRef.current.contains(e.target)) {
+	// 			setOpenNav(false);
+	// 		}
+	// 	};
+	// 	document.addEventListener("mousedown", handler);
+
+	// 	return () => {
+	// 		window.removeEventListener("resize", () => window.innerWidth >= 960 && setOpenNav(false));
+	// 		window.removeEventListener("scroll", () => setScrollPosition(Math.round(window.scrollY)));
+	// 		document.removeEventListener("scroll", () => setOpenNav(false));
+	// 		document.removeEventListener("mousedown", handler);
+	// 	};
+	// }, []);
+
 	const user = { name: "rahim" };
 
 	const navCollapse = (
-		<Collapse open={open} className="pt-2">
+		<Collapse open={isOpenNav} className="pt-2">
 			<div className="mx-10 bg-white flex border rounded-full border-gray-400 shadow-gray-300 items-center  ">
 				<div className="pl-10 pr-5 py-2 hover:bg-gray-200 rounded-full">
 					<Typography variant="small">Where</Typography>
@@ -249,48 +277,41 @@ const Nav = () => {
 	);
 
 	return (
-		<div ref={menuRef} className="sticky top-0  inset-0 z-50 bg-white ">
-			<header className="flex justify-between border-b px-10 py-4 ">
+		<div className="sticky top-0  inset-0 z-50 bg-white ">
+			<header ref={menuRef} className="flex justify-between border-b px-10 py-4 ">
 				<Link to={"/"} className="flex items-start gap-1">
 					<img className="w-24" src={logo} alt="..." />
 				</Link>
 
 				<div className=" ">
-					{open ? (
-						<div className="text-center">
-							<IconButton onClick={toggleOpen} variant="outlined" className="rounded-full">
-								<RxCross2 className="w-5 h-5" />
-							</IconButton>
-						</div>
-					) : (
-						<div
-							onClick={toggleOpen}
-							className={`mx-auto flex gap-2 border border-gray-300 rounded-full py-2 px-4 shadow-md shadow-gray-300  cursor-pointer  ${
-								open ? "opacity-0 h-0 duration-500 " : "opacity-100 duration-500 h-auto "
-							}`}
-						>
-							<div className="px-2 py-1 border-r border-gray-400">Anywhere</div>
-							<div className="px-2 py-1 border-r border-gray-400">Any week</div>
-							<div className="px-2 py-1 ">Add guests</div>
-							<button className="bg-primary text-white p-2 rounded-full">
-								<svg
-									xmlns="http://www.w3.org/2000/svg"
-									fill="none"
-									viewBox="0 0 24 24"
-									strokeWidth={1.5}
-									stroke="currentColor"
-									className="w-4 h-4"
-								>
-									<path
-										strokeLinecap="round"
-										strokeLinejoin="round"
-										d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z"
-									/>
-								</svg>
-							</button>
-						</div>
-					)}
-					{open && navCollapse}
+					<div
+						onClick={() => setIsOpenNav(true)}
+						className={`mx-auto flex gap-2 border border-gray-300 rounded-full py-2 px-4 shadow-md shadow-gray-300  cursor-pointer w-96 ${
+							isOpenNav ? "opacity-0 h-0 duration-500 " : "opacity-100 duration-500 h-auto "
+						}`}
+					>
+						<div className="px-2 py-1 border-r border-gray-400">Anywhere</div>
+						<div className="px-2 py-1 border-r border-gray-400">Any week</div>
+						<div className="px-2 py-1 ">Add guests</div>
+						<button className="bg-primary text-white p-2 rounded-full">
+							<svg
+								xmlns="http://www.w3.org/2000/svg"
+								fill="none"
+								viewBox="0 0 24 24"
+								strokeWidth={1.5}
+								stroke="currentColor"
+								className="w-4 h-4"
+							>
+								<path
+									strokeLinecap="round"
+									strokeLinejoin="round"
+									d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z"
+								/>
+							</svg>
+						</button>
+					</div>
+
+					{navCollapse}
 				</div>
 
 				<Link to="/" className="flex items-start gap-2 border border-gray-300 rounded-full py-2 px-4 h-12">

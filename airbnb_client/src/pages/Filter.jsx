@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable react/prop-types */
 
@@ -9,11 +10,12 @@ import { MdOutlineWarehouse } from "react-icons/md";
 import { RiHotelLine } from "react-icons/ri";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
-import api from "../utils/fetchApi";
+import { getWithParams } from "../utils/fetchApi";
 import { useProductContext } from "../context/ProductProvider";
 
 export function Filter({ handleOpen, open }) {
 	const { filterItem, setFilterItem } = useProductContext();
+
 	const [minValue, setMinValue] = useState(10);
 	const [maxValue, setMaxValue] = useState(400);
 	const [selectedBedRoomValue, setSelectedBedRoomValue] = useState("any");
@@ -34,15 +36,11 @@ export function Filter({ handleOpen, open }) {
 		navigate("/filter");
 	};
 
-	const handleBedRoomValue = (value) => {
-		setSelectedBedRoomValue(value);
-	};
-	const handleBedValue = (value) => {
-		setSelectedBedValue(value);
-	};
-	const handleBathRoomValue = (value) => {
-		setSelectedBathRoomValue(value);
-	};
+	const handleBedRoomValue = (value) => setSelectedBedRoomValue(value);
+
+	const handleBedValue = (value) => setSelectedBedValue(value);
+
+	const handleBathRoomValue = (value) => setSelectedBathRoomValue(value);
 
 	// -------------------------------------
 
@@ -93,7 +91,7 @@ export function Filter({ handleOpen, open }) {
 	useEffect(() => {
 		const fetchData = async () => {
 			try {
-				const payload = {
+				const params = {
 					property_type: selectedPropertyTypes,
 					room: selectedBedRoomValue,
 					bed: selectedBedValue,
@@ -102,8 +100,9 @@ export function Filter({ handleOpen, open }) {
 					maxPrice: maxValue,
 				};
 
-				const response = await api.get("/item/filtered", { params: payload });
+				const response = await getWithParams("item/filtered", { params });
 				const data = response.data?.payload;
+				// console.log(response.data);
 				setFilterItem(data);
 			} catch (err) {
 				setError(err.response?.data.message);
@@ -275,7 +274,7 @@ export function Filter({ handleOpen, open }) {
 					</div>
 				</DialogBody>
 				<DialogFooter>
-					<Button variant="gradient" className="bg-black" onClick={handleFilterResult}>
+					<Button variant="gradient" className="bg-black capitalize" onClick={handleFilterResult}>
 						<span>Show {isNaN(filterItem) ? filterItem.count : "0"} places</span>
 					</Button>
 				</DialogFooter>
